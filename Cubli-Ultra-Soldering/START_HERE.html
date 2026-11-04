@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cubli Ultra — team soldering instructions</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;color:#172b35;max-width:900px;margin:28px auto;padding:0 22px;background:#f7f9fa}h1{font-size:27px;margin-bottom:8px}h2{font-size:19px;margin:23px 0 8px}p{margin:8px 0}a{color:#006b8f}table{width:100%;border-collapse:collapse;background:white;font-size:15px}td,th{text-align:left;padding:9px 10px;border-bottom:1px solid #d5dfe3;vertical-align:top}th{background:#eaf1f4}ul,ol{padding-left:23px}li{margin:6px 0}.note{background:#fff2d9;border-left:4px solid #ad6500;padding:12px 15px}.small{font-size:13px;color:#526672}code{font-size:.95em}footer{margin-top:24px;border-top:1px solid #d5dfe3;padding-top:10px}@media print{body{font-size:11px;background:white;margin:0;max-width:none;padding:0}h1{font-size:21px}h2{font-size:14px;margin:14px 0 5px}table{font-size:10px}td,th{padding:5px}p,li{margin:4px 0}.small{font-size:10px}h2{break-after:avoid}tr,.note{break-inside:avoid}}@media(max-width:550px){body{padding:0 12px}table{font-size:13px}td,th{padding:7px 5px}}</style></head><body>
+<h1>Cubli Mini Ultra — soldering pack</h1>
+<p><strong>Extract the whole ZIP, then open this file in a browser.</strong> Assemble one of each board. The four linked helpers contain the exact parts, locations, omissions and rework drawings and work offline.</p>
+<table><thead><tr><th>Open helper</th><th>Fit</th><th>Leave off</th></tr></thead><tbody>
+<tr><td><a href="main-soldering.html">Main controller</a> — both sides</td><td>229</td><td>R37, R38; CN6 connector (direct motor wires later)</td></tr>
+<tr><td><a href="encoder-soldering.html">Encoder</a> — U3/C3 top, CN6 bottom</td><td>3</td><td>H1, CN3, CN7</td></tr>
+<tr><td><a href="imu-soldering.html">IMU</a> — top</td><td>5</td><td>H1</td></tr>
+<tr><td><a href="programmer-soldering.html">USB programmer</a> — top</td><td>31</td><td>H1, H2</td></tr>
+</tbody></table>
+<p class="small">268 components total; wires are additional. Counts are per setup. The helper list is the assembly parts list; purchasing quantities include spares.</p>
+<h2>Use the helpers while soldering</h2>
+<p>Search a reference or LCSC code, select the row, then use <strong>Zoom to part</strong>. Bottom views already show the physical underside. Green <strong>1</strong> marks pad 1; check the actual chip/LED polarity marking. Purple labels identify 3.3 V wire targets. Check off fitted parts; export the checklist when handing work over.</p>
+<ul>
+<li>Follow the helper’s selected part, including replacements. Main C78/C79/C80 are <strong>10 µF, 25 V</strong>; fit the specified F1 fuse. No extra capacitor or gate-driver supply rewire is required.</li>
+<li>IMU U1 sits at the existing <strong>173°</strong> angle. Align to its lands, not the PCB edge.</li>
+<li>Inspect stencil openings before paste: keep R37/R38 clear and check the ESP32 center pads have divided openings. Reflow SMT one side at a time with support for the populated side. Use the paste/component reflow instructions; inspect hidden-pad parts carefully. Solder through-hole parts and wires afterward.</li>
+</ul>
+<h2>Three required modifications</h2>
+<ol>
+<li><strong>Main:</strong> leave R37/R38 absent. Add insulated 30 AWG wires from <strong>C44 pad 2 → R37 pad 1</strong> and <strong>C44 pad 2 → R38 pad 1</strong>. Their pad-2 ends remain 5 V; do not bridge them. Keep R47, C45 and C46 fitted. Select C44/R37/R38 in the helper to locate the pads.</li>
+<li><strong>Encoder:</strong> before fitting U3, remove the small top trace section marked red in its helper. Confirm H1.5 still connects to U3.1, U3.2 and C3 supply, but is isolated from CN6.6. Add <strong>main CN9.1 (3.3 V) → encoder H1.5</strong>; main C44.2 is an alternative source. Leave H1 empty. Keep all seven encoder-cable wires intact.</li>
+<li><strong>Programmer cable:</strong> disconnect pin 1 of <strong>one six-wire cable</strong>, insulate both ends separately and label it PROGRAMMER ONLY. Verify pin 1 is open and pins 2–6 remain one-to-one. The IMU’s six-wire cable stays intact. No programmer PCB cut is needed.</li>
+</ol>
+<h2>Connections and handoff</h2>
+<table><thead><tr><th>Cable / lead</th><th>Connection</th></tr></thead><tbody>
+<tr><td>7-wire, intact</td><td>Main CN12 ↔ encoder CN6</td></tr>
+<tr><td>6-wire, intact</td><td>Main CN10 ↔ IMU CN2</td></tr>
+<tr><td>6-wire, pin 1 disconnected</td><td>Programmer CN1 ↔ main CN9 (motor MCU), or main CN5 (IMU MCU); change with power off</td></tr>
+<tr><td>Power / motor, later</td><td>18 AWG power lead to main CN1/XT30 with checked polarity. Motor’s three leads go to main CN6’s three electrical contacts; the two mounting anchors are ground.</td></tr>
+</tbody></table>
+<p class="note"><strong>Before handoff:</strong> inspect orientation, bridges and hidden-pad joints; verify the two CAN jumper connections, encoder isolation and cable continuity. Keep the motor disconnected. Power/firmware commissioning is a separate step: the stock firmware is not the one-motor test program.</p>
+<footer class="small">Prepared 31 Oct 2026 from the reviewed English helpers. Original schematics are in <code>reference/</code> and linked inside each helper; use them for circuit reference, and the helpers for replacement parts and omissions. Checkmarks record work; they do not verify solder quality.</footer>
+</body></html>
