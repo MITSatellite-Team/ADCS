@@ -11,7 +11,8 @@
 </tbody></table>
 <p class="small">268 components total; wires are additional. Counts are per setup. The helper list is the assembly parts list; purchasing quantities include spares.</p>
 <h2>Use the helpers while soldering</h2>
-<p>Search a reference or LCSC code, select the row, then use <strong>Zoom to part</strong>. Bottom views already show the physical underside. Green <strong>1</strong> marks pad 1; check the actual chip/LED polarity marking. Purple labels identify 3.3 V wire targets. Check off fitted parts; export the checklist when handing work over.</p>
+<p>Search a reference or LCSC code, select the row, then use <strong>Zoom to part</strong>. Bottom views already show the physical underside. Green <strong>1</strong> marks pad 1; check the actual chip/LED polarity marking. Purple labels identify 3.3 V wire targets. Check off fitted parts as you go.</p>
+<p>Checkmarks are committed to <code>progress/&lt;board&gt;.js</code> in the repo, not just saved in your browser. Workflow: <code>git pull</code> → open the helper → tick parts → <strong>Save progress to file</strong> (if it downloads instead of saving in place, move it into <code>progress/</code> as the on-screen message says) → commit → push. Committing is the handoff — there is nothing further to export.</p>
 <ul>
 <li>Follow the helper’s selected part, including replacements. Main C78/C79/C80 are <strong>10 µF, 25 V</strong>; fit the specified F1 fuse. No extra capacitor or gate-driver supply rewire is required.</li>
 <li>IMU U1 sits at the existing <strong>173°</strong> angle. Align to its lands, not the PCB edge.</li>
