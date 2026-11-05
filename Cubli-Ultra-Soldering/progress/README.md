@@ -28,11 +28,13 @@ sed -n '3,$p' progress/programmer.js | sed '$d' | sed 's/,\( *[}]\)/\1/' | jq .
   2. Open the board's HTML checklist page
   3. Tick parts as you solder them
   4. Click **Save progress to file**
-     - If the page is served over `http://` (e.g. `python3 -m http.server`),
+     - A file for the progress of the current board will be downloaded. Move this file to ADCS/Cubli-Ultra-Soldering/progress. You'll be asked if you want to replace the file already there, say yes.
+
+<!--     - If the page is served over `http://` (e.g. `python3 -m http.server`),
        this writes `progress/<board>.js` in place.
      - If the page is opened as `file://` (double-clicked), the browser
        downloads the file instead — move it into place:
-       `mv ~/Downloads/<board>.js progress/<board>.js`
+       `mv ~/Downloads/<board>.js progress/<board>.js`-->
   5. Commit and push
   
 ## Format
