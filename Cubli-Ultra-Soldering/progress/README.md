@@ -22,6 +22,19 @@ and the trailing comma on the last entry first:
 sed -n '3,$p' progress/programmer.js | sed '$d' | sed 's/,\( *[}]\)/\1/' | jq .
 ```
 
+  ## Workflow
+  
+  1. `git pull`
+  2. Open the board's HTML checklist page
+  3. Tick parts as you solder them
+  4. Click **Save progress to file**
+     - If the page is served over `http://` (e.g. `python3 -m http.server`),
+       this writes `progress/<board>.js` in place.
+     - If the page is opened as `file://` (double-clicked), the browser
+       downloads the file instead — move it into place:
+       `mv ~/Downloads/<board>.js progress/<board>.js`
+  5. Commit and push
+  
 ## Format
 
 ```js
@@ -40,6 +53,7 @@ window.SOLDER_PROGRESS["programmer"] = {
 One `"REF": true` entry per line, in canonical order (letter prefix, then
 numeric digits — `R2, R12, R16`, not a plain string sort). Every entry,
 **including the last**, ends with a trailing comma.
+
 
 ### Why trailing commas on every line
 
@@ -97,18 +111,6 @@ This is the only manual step this format requires; it only comes up for the
 alphabetically-last ref, and the fix is always "keep both, reorder if
 needed."
 
-## Workflow
-
-1. `git pull`
-2. Open the board's HTML checklist page
-3. Tick parts as you solder them
-4. Click **Save progress to file**
-   - If the page is served over `http://` (e.g. `python3 -m http.server`),
-     this writes `progress/<board>.js` in place.
-   - If the page is opened as `file://` (double-clicked), the browser
-     downloads the file instead — move it into place:
-     `mv ~/Downloads/<board>.js progress/<board>.js`
-5. Commit and push
 
 ## Caveat
 
