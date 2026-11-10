@@ -16,7 +16,7 @@
 <div class="tools"><button id="top" aria-pressed="true">Top</button><button id="bottom" aria-pressed="false">Bottom</button><span class="spacer"></span><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="fit">Fit board</button><button id="focus-part">Zoom to part</button></div>
 <div class="tools"><label><input type="checkbox" id="show-refs">All references</label><label><input type="checkbox" id="show-rework" checked>Rework guides</label></div>
 <div id="rework-focus" class="notice" role="note" hidden></div>
-<div class="canvas-wrap"><svg id="board-view" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PCB placement map"><image id="board-image" preserveAspectRatio="none"></image><g id="overlay" class="overlay"></g></svg><div class="legend"><span><i class="swatch" style="border-color:#116fe7"></i>Selected part</span><span><i class="swatch" style="border-color:#00a85b"></i>Pad 1 · orientation</span><span><b style="color:#c83232">×</b>Leave absent</span><span><b style="color:#b76b00">◇</b>Direct wires</span></div></div>
+<div class="canvas-wrap"><svg id="board-view" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PCB placement map"><image id="board-image" preserveAspectRatio="none"></image><g id="overlay" class="overlay"></g></svg><div class="legend"><span><i class="swatch" style="border-color:#116fe7"></i>Selected part</span><span><i class="swatch" style="border-color:#00a85b"></i>Pad 1 · orientation</span><span><i class="swatch" style="border-color:#0098c7"></i>Same part, still needed</span><span><b style="color:#c83232">×</b>Leave absent</span><span><b style="color:#b76b00">◇</b>Direct wires</span></div></div>
 <p class="caption" id="view-caption"></p><p class="help-line">Drag to pan · scroll to zoom · select a part from the board or list. Bottom is mirrored to show the physical underside.</p>
 <div class="selection" id="selection" aria-live="polite"></div>
 <p class="disclaimer">Pad 1 is the source placement file's pad-1 location, checked against copper. It does not automatically mean positive, cathode or a package body-dot position. Match the actual package marking and datasheet.</p>
@@ -64,6 +64,7 @@ $('show-refs').checked=DATA.board!=='main';if(DATA.board==='main'||DATA.board===
 function el(tag,attrs={},text){const node=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))node.setAttribute(k,v);if(text!==undefined)node.textContent=text;return node;}
 function textEl(tag,text,cls){const e=document.createElement(tag);e.textContent=text;if(cls)e.className=cls;return e;}
 function xy(x,y){return [side==='bottom'?DATA.bounds[0][0]+DATA.bounds[1][0]-x:x,DATA.bounds[0][1]+DATA.bounds[1][1]-y];}
+function partKey(c){return c.lcsc?'lcsc:'+c.lcsc:'ref:'+c.ref;}
 function save(){dirty=true;try{localStorage.setItem(key,JSON.stringify({refs:[...checked],base:fileStamp}));}catch{$('storage-note').textContent='This browser could not buffer checkmarks. Use Save progress to file now, or you may lose this session.';$('storage-note').classList.add('storage-error');}}
 function cmpRef(a,b){const m=/^([A-Za-z]*)(\d*)/,x=m.exec(a),y=m.exec(b),p=x[1].toUpperCase(),q=y[1].toUpperCase();
  if(p!==q)return p<q?-1:1;const n=(x[2]?parseInt(x[2],10):-1)-(y[2]?parseInt(y[2],10):-1);return n||(a<b?-1:a>b?1:0);}
@@ -119,6 +120,13 @@ function draw(){
   else if(c.status==='wire')g.append(el('path',{d:`M ${x} ${y-1.3} L ${x+1.3} ${y} L ${x} ${y+1.3} L ${x-1.3} ${y} Z`,fill:'none',stroke:'#b76b00','stroke-width':.18}));
   else g.append(el('path',{d:`M ${x-.65} ${y-.65} L ${x+.65} ${y+.65} M ${x-.65} ${y+.65} L ${x+.65} ${y-.65}`,fill:'none',stroke:'#c83232','stroke-width':.2}));
   if($('show-refs').checked)g.append(el('text',{x,y:y-1.05,'text-anchor':'middle',fill:'#12222c','font-size':Math.max(.65,11*scale),'paint-order':'stroke',stroke:'white','stroke-width':.18},c.ref));
+ }
+ if(selected.status==='fit'){
+  const sk=partKey(selected);
+  for(const c of DATA.components.filter(c=>c.side===side&&c.status==='fit'&&c.ref!==selected.ref&&!checked.has(c.ref)&&partKey(c)===sk)){
+   const [x,y]=xy(c.x,c.y);
+   g.append(el('circle',{cx:x,cy:y,r:rr+Math.max(.1,1.4*scale),fill:'none',stroke:'#0098c7','stroke-width':Math.max(.08,1.6*scale)}));
+  }
  }
  if($('show-rework').checked){
   if(DATA.board==='main'&&side==='bottom'){
