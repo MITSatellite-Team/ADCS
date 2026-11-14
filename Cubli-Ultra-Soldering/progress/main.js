@@ -167,6 +167,7 @@ window.SOLDER_PROGRESS["main"] = {
     "R34": true,
     "R35": true,
     "R36": true,
+    "R45": true,
     "R48": true,
     "R49": true,
     "R50": true,
